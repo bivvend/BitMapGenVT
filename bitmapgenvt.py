@@ -2,7 +2,7 @@ import sys
 import time #used for profiling
 from PIL import Image, ImageDraw
 
-def generate_image(size_x, size_y, num_lines_per_block, line_length_pixels, line_y_pitch_pixels, pixel_offset_per_line):
+def generate_image(size_x, size_y, num_lines_per_block, line_length_pixels, line_y_pitch_pixels, pixel_offset_per_line, debug):
     '''Generate image function'''
     print("Image size set as : {} , {}".format(str(size_x), str(size_y)))
     print("{} lines per block".format(str(num_lines_per_block)))
@@ -21,6 +21,8 @@ def generate_image(size_x, size_y, num_lines_per_block, line_length_pixels, line
         for line in range(0, num_lines_per_block):
             for pixel_x in range(0, line_length_pixels):
                 try:
+                    if(debug):
+                        print("Plotting at {},{} ".format(str(current_x + pixel_x), str(current_y) ))
                     pixels_array[current_x + pixel_x, current_y] = 0
                 except:
                     pass
@@ -42,6 +44,7 @@ if __name__ == "__main__":
         input_line_length_pixels = int(sys.argv[4])
         input_line_y_pitch_pixels = int(sys.argv[5])
         input_pixel_offset_per_line = int(sys.argv[6])
+        input_debug = bool(sys.argv[7]=="True")
         
         bad_param = False
         if input_size_x < 1:
@@ -59,7 +62,8 @@ if __name__ == "__main__":
     print("Starting generation...")
     time1 = time.time()
     if generate_image(input_size_x, input_size_y, input_num_lines_per_block,
-        input_line_length_pixels, input_line_y_pitch_pixels, input_pixel_offset_per_line):
+        input_line_length_pixels, input_line_y_pitch_pixels, 
+        input_pixel_offset_per_line, input_debug):
         print("Generation successful.")
     else:
         print("Generation failed.")
