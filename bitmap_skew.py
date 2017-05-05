@@ -3,14 +3,10 @@ import os
 import time #used for profiling
 from PIL import Image, ImageDraw
 
-# EXAMPLE COMMAND python bitmapgenvt.py 50 40 6 10 10 8 True#
+# EXAMPLE COMMAND python bitmap_skew.py input.bmp 1 False
 #    Expected parameters
 #    -------------------
-#    size_x (pixels)
-#    size_y (pixels)
-#    num_lines_per_block
-#    line length (pixels)
-#    line y pitch (pixels)
+#    input bitmap
 #    pixel offset per line
 #    Show output positions True/False
 
@@ -21,13 +17,13 @@ def generate_image(bitmap, pixel_offset_per_line, debug):
     if os.path.isfile(bitmap is not True):
         print("Input file not found")
         return False
-        
+
     im = Image.open(bitmap)
     pixels_array_input = im.load()
     size_x, size_y = im.size 
     print("Input image size: {} , {}".format(str(size_x), str(size_y)))
 
-    im_out = Image.new("1", (size_x, size_y), 1)
+    im_out = Image.new("1", (size_x + size_y*pixel_offset_per_line, size_y), 1)
     pixels_array_output = im_out.load()
 
     for y in range(0, size_y):
@@ -40,6 +36,8 @@ def generate_image(bitmap, pixel_offset_per_line, debug):
                 pass #ignore attempts to write outside of array
 
     im_out.save("output.bmp")
+    size_x, size_y = im_out.size
+    print("Output image size: {} , {}".format(str(size_x), str(size_y)))
 
     return True
 
